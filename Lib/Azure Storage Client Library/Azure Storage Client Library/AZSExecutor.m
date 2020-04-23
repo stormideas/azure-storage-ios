@@ -498,6 +498,11 @@
         // TODO: Decide what to do about the delegate queue - should we have greater control over this?  Should we allow users to pass in a delegate queue?
         // Passing in nil will allow the NSURLSession to create a default serial delegate queue.
         NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:nil];
+        
+        if (self.operationContext.didCreateSession) {
+            self.operationContext.didCreateSession(session, self.operationContext);
+        }
+        
         NSURLSessionDataTask *task;
         if (self.storageCommand.source != nil)
         {
@@ -516,12 +521,13 @@
 // TODO: Figure out if we need to support streaming for SAS.
 //-(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task needNewBodyStream:(void (^)(NSInputStream *))completionHandler;
  
- /*
+
  -(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
  {
- // TODO: Update status with data sent
+     if (self.operationContext.didSendBodyData) {
+         self.operationContext.didSendBodyData(bytesSent, totalBytesSent, totalBytesExpectedToSend, task.originalRequest, self.operationContext);
+     }
  }
- */
 
 -(void)createAndSpinRunloopWithOutputStream:(id)outputStream
 {

@@ -70,6 +70,14 @@ AZS_ASSUME_NONNULL_BEGIN
 @property (copy, AZSNullable) void(^responseReceived)(NSMutableURLRequest *, NSHTTPURLResponse *, AZSOperationContext *);
 // TODO: Should we have the other block methods from C# as well?
 
+/** Optional. If non-nil, it's a block that the library will call immediately upon receiving the didSendBodyData callback from NSURLSession
+ */
+@property (copy, AZSNullable) void(^didSendBodyData)(NSInteger bytesSent, NSInteger totalBytesSent, NSInteger totalBytesExpectedToSend, NSURLRequest *, AZSOperationContext *);
+
+/** Optional. If non-nil, it's a block that the library will call immediately upon creating NSURLSession
+*/
+@property (copy, AZSNullable) void(^didCreateSession)(NSURLSession *, AZSOperationContext *);
+
 /**
  Optional.  An NSDictionary mapping strings to strings.  All objects in this dictionary will be interpreted as additional headers to
  be added to the request, with the keys being the name of the header and the value the header value.  The library will sign these if necessary.
