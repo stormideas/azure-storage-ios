@@ -441,6 +441,19 @@
                 }];
             }
             self.streamWaiting = NO;
+        } else if (self.streamingError) {
+            NSError *error = self.streamingError;
+            
+            [self.operationContext logAtLevel:AZSLogLevelError withMessage:@"Error in stream callback.  Error code = %ld, error domain = %@, error userinfo = %@", (long)error.code, error.domain, error.userInfo];
+            
+            [self closeWithCompletionHandler:^{
+                ;
+            }];
+
+            if (self.completionHandler)
+            {
+                self.completionHandler(error);
+            }
         }
     }
 }
